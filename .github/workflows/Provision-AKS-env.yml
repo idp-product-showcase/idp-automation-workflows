@@ -55,10 +55,13 @@ jobs:
           clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
           baseUrl: https://api.getport.io
           operation: UPSERT
-          runId: ${{ fromJson(inputs.port_context).runId }}
-          #identifier: ${{ inputs.service_name }}
-          #blueprint: service
+          identifier: ${{inputs.aks_environnment}}
+          blueprint: AKS Envrironnment
           properties: |
             {
-              "github_url": "${{ steps.create_repo.outputs.repo_url }}"
+              "repository": "${{ inputs.aks_environnment }}",
+              "cpu_request": "${{ inputs.cpu_quota }}"
+              "memory_requests": "${{ inputs.memoryQuotaGiB }}",
+              "cluster_name": "DEV",
+              "created_at": "${{ github.event.workflow_run.created_at }}",
             }
