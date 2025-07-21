@@ -55,7 +55,7 @@ jobs:
           clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
           baseUrl: https://api.getport.io
           operation: UPSERT
-          identifier: ${{inputs.aks_environnment}}
+          identifier: aks_environnments
           blueprint: AKS Envrironnment
           properties: |
             {
