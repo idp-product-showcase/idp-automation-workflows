@@ -27,10 +27,9 @@ jobs:
       - name: creating YAML namespace configuration
         id: create_yaml_namespace_configuration
         run: |
-          echo "Creating repository: ${{ inputs.service_name }}"
-          echo "namespace: ${inputs.aks_environnment}" > namespace.yaml
-          echo "cpuQuota: ${inputs.cpu_quota}" >> namespace.yaml
-          echo "memoryQuotaGiB: ${inputs.memory_quota_gi_b}" >> namespace.yaml
+          echo "namespace: ${{inputs.aks_environnment}}" > namespace.yaml
+          echo "cpuQuota: ${{inputs.cpu_quota}}" >> namespace.yaml
+          echo "memoryQuotaGiB: ${{inputs.memory_quota_gi_b}}" >> namespace.yaml
           echo "namespace_config=$(cat namespace.yaml)" >> "$GITHUB_OUTPUT"   
       
       - name: Create Repository
