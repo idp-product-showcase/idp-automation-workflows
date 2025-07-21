@@ -37,7 +37,7 @@ jobs:
       - name: Create Repository
         id: create_repo
         env:
-          GH_TOKEN: ${{ secrets.ORG_ADMIN_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           echo "Creating repository: ${{ inputs.aks_environnment }}"
 
