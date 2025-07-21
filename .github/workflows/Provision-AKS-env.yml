@@ -15,6 +15,10 @@ on:
         description: 'Required Memory Quota for the AKS Namespace'
         required: true
         type: number
+      port_context:
+        description: 'Port context as JSON string'
+        required: true
+        type: string
 
 jobs:
   create-repository:
