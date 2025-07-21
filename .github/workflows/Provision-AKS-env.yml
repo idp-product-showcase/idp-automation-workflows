@@ -30,7 +30,9 @@ jobs:
           echo "namespace: ${{inputs.aks_environnment}}" > namespace.yaml
           echo "cpuQuota: ${{inputs.cpu_quota}}" >> namespace.yaml
           echo "memoryQuotaGiB: ${{inputs.memory_quota_gi_b}}" >> namespace.yaml
-          echo "namespace_config=$(cat namespace.yaml)" >> "$GITHUB_OUTPUT"   
+          echo "namespace_config<<EOF" >> "$GITHUB_OUTPUT"
+          cat namespace.yaml >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
       
       - name: Create Repository
         id: create_repo
