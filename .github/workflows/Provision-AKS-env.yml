@@ -53,7 +53,7 @@ jobs:
         with:
           clientId: ${{ secrets.PORT_CLIENT_ID }}
           clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
-          baseUrl: https://api.getport.io
+          baseUrl: https://api.port.io
           operation: UPSERT
           identifier: ${{ inputs.aks_environnment }}
           title: ${{ inputs.aks_environnment }}
@@ -61,7 +61,7 @@ jobs:
           properties: |
             {
               "repository": "${{ inputs.aks_environnment }}",
-              "cpu_request": "${{ inputs.cpu_quota }}",
+              "cpu_request": "${{ inputs.cpu_quota }}", 
               "memory_requests": "${{ inputs.memoryQuotaGiB }}",
               "cluster_name": "DEV",
               "created_at": "${{ github.event.workflow_run.created_at }}"
