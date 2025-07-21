@@ -56,7 +56,7 @@ jobs:
           baseUrl: https://api.getport.io
           operation: UPSERT
           identifier: aks_environnments
-          blueprint: AKS Envrironnment
+          blueprint: aks_environnments
           properties: |
             {
               "repository": "${{ inputs.aks_environnment }}",
