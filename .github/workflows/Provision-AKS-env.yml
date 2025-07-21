@@ -64,5 +64,5 @@ jobs:
               "cpu_request": "${{ inputs.cpu_quota }}", 
               "memory_requests": "${{ inputs.memoryQuotaGiB }}",
               "cluster_name": "DEV",
-              "created_at": "${{ github.run_started_at }}"
+              "created_at": "2025-07-21T21:11:11.298Z"
             }
