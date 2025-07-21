@@ -57,7 +57,7 @@ jobs:
           operation: UPSERT
           identifier: ${{ inputs.aks_environnment }}
           title: ${{ inputs.aks_environnment }}
-          blueprint: aks_environnments
+          blueprint: aks_environnment
           properties: |
             {
               "repository": "${{ inputs.aks_environnment }}",
