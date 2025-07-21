@@ -34,19 +34,19 @@ jobs:
           cat namespace.yaml >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
       
-      - name: Create Repository
-        id: create_repo
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          echo "Creating repository: ${{ inputs.aks_environnment }}"
+      # - name: Create Repository
+      #   id: create_repo
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #   run: |
+      #     echo "Creating repository: ${{ inputs.aks_environnment }}"
 
-          gh repo create "${{ github.repository_owner }}/${{ inputs.aks_environnment }}" \
-            --private \
-            --description "${{ inputs.description }}" \
-            --add-readme
+      #     gh repo create "${{ github.repository_owner }}/${{ inputs.aks_environnment }}" \
+      #       --private \
+      #       --description "${{ inputs.description }}" \
+      #       --add-readme
 
-          echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.aks_environnment }}" >> "$GITHUB_OUTPUT"
+      #     echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.aks_environnment }}" >> "$GITHUB_OUTPUT"
 
       - name: Report to Port
         uses: port-labs/port-github-action@v1
