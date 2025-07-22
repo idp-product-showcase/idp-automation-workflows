@@ -26,13 +26,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TEMPLATE_REPO="idp-product-showcase/idp-template-application-${{ inputs.language }}"
-          NEW_REPO="${{ github.repository_owner }}/${{ inputs.repository_name }}"
-          gh repo create "$NEW_REPO" \
+          gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
             --private \
-            --template "$TEMPLATE_REPO" \
-            --description "Scaffolded from $TEMPLATE_REPO" \
-          echo "repo_url=https://github.com/$NEW_REPO" >> "$GITHUB_OUTPUT"
+            --template "idp-product-showcase/idp-template-application-${{ inputs.language }}"
       
 
       # - name: Report to Port
