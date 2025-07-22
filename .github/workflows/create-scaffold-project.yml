@@ -28,7 +28,7 @@ jobs:
         run: |
           gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
             --private \
-            --template "idp-template-application-${{ inputs.language }}"
+            --template "${{ github.repository_owner }}/idp-template-application-${{ inputs.language }}"
       
 # --template "idp-product-showcase/idp-template-application-${{ inputs.language }}"
       # - name: Report to Port
