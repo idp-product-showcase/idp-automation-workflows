@@ -1,5 +1,9 @@
 name: Create Scaffold Project
 
+permissions:
+  contents: write
+  actions: write
+  
 on:
   workflow_dispatch:
     inputs:
@@ -16,6 +20,7 @@ on:
           - java
           - javascript
           - python
+
 
 jobs:
   create-template-repository:
