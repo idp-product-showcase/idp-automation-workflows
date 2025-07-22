@@ -3,7 +3,8 @@ name: Create Scaffold Project
 permissions:
   contents: write
   actions: write
-
+  repositories: write # 'write' also includes 'read'
+  
 on:
   workflow_dispatch:
     inputs:
