@@ -3,7 +3,7 @@ name: Create Scaffold Project
 permissions:
   contents: write
   actions: write
-  
+
 on:
   workflow_dispatch:
     inputs:
@@ -19,7 +19,6 @@ on:
           - python
           - java
           - javascript
-          - python
 
 
 jobs:
