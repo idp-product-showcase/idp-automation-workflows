@@ -1,4 +1,4 @@
-name: Provision an AKS Environment
+name: Create Scaffold Project
 
 on:
   workflow_dispatch:
