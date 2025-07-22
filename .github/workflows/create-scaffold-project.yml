@@ -20,7 +20,7 @@ on:
           - python
           - java
           - javascript
-
+          - chsarp
 
 jobs:
   create-template-repository:
@@ -34,37 +34,3 @@ jobs:
           gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
             --private \
             --template "${{ github.repository_owner }}/idp-template-application-${{ inputs.language }}"
-      
-# --template "idp-product-showcase/idp-template-application-${{ inputs.language }}"
-      # - name: Report to Port
-      #   uses: port-labs/port-github-action@v1
-      #   with:
-      #     clientId: ${{ secrets.PORT_CLIENT_ID }}
-      #     clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
-      #     baseUrl: https://api.port.io
-      #     operation: UPSERT
-      #     identifier: ${{ inputs.aks_environnment }}
-      #     title: ${{ inputs.aks_environnment }}
-      #     blueprint: aks_environnment
-      #     properties: |
-      #       {
-      #         "repository": "${{ inputs.aks_environnment }}",
-      #         "cpu_request": "${{ inputs.cpu_quota }}", 
-      #         "memory_requests": "${{ inputs.memory_quota_gi_b }}",
-      #         "cluster_name": "DEV",
-      #         "created_at": "2025-07-21T21:11:11.298Z"
-      #       }
-
-      # - name: Create Repository
-      #   id: create_repo
-      #   env:
-      #     GH_TOKEN: ${{ github.token }}
-      #   run: |
-      #     echo "Creating repository: ${{ inputs.aks_environnment }}"
-
-      #     gh repo create "${{ github.repository_owner }}/${{ inputs.aks_environnment }}" \
-      #       --private \
-      #       --description "${{ inputs.description }}" \
-      #       --add-readme
-
-      #     echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.aks_environnment }}" >> "$GITHUB_OUTPUT"
