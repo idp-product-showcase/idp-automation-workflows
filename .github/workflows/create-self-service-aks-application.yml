@@ -77,13 +77,13 @@ jobs:
 
               "URL": "${{ needs.create-scaffold-project.outputs.repo_url }}",
               "lifecycle": "${{ fromJSON(inputs.application_properties).lifecycle }}",
-              "language": "${{ fromJSON(inputs.application_properties).language }}",
+              "language": "${{ fromJSON(inputs.application_properties).language }}"
             }
           relations: | 
             {
               "environment": "${{ fromJSON(inputs.application_properties).env }}",
               "repository": "${{ fromJSON(inputs.repository_properties).repository_name }}",
-              "domain": "${{ fromJSON(inputs.port_context).domain_identifier }} ",
+              "domain": "${{ fromJSON(inputs.port_context).domain_identifier }}",
               "aks_namespace": "${{ fromJSON(inputs.aks_namespace_properties).namespace_name }}",
               "application_tier": "${{ fromJSON(inputs.application_properties).application_tier }}"
             }
