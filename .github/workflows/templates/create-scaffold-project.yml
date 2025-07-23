@@ -20,7 +20,10 @@ on:
           - python
           - java
           - javascript
-          - chsarp
+outputs:
+  repo_url:
+    description: "URL of the created repository"
+    value: ${{ jobs.create-template-repository.outputs.repo_url }}
 
 jobs:
   create-template-repository:
@@ -34,3 +37,4 @@ jobs:
           gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
             --private \
             --template "${{ github.repository_owner }}/idp-template-application-${{ inputs.language }}"
+           echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"

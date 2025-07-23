@@ -1,0 +1,66 @@
+name: create-application-level-3
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: 'Repository name for the scaffolded project'
+        required: true
+        type: string
+      application_name:
+        description: 'Repository name for the scaffolded project'
+        required: true
+        type: string
+      language:
+        description: 'support language'
+        required: true
+        type: choice
+        options:
+          - python
+          - java
+          - javascript
+      namespace_name:
+        description: 'Repository name for the scaffolded project'
+        required: true
+        type: string
+      cpu_quota:
+        description: 'Repository name for the scaffolded project'
+        required: true
+        type: string
+      memory_quota_gi_b:
+        description: 'Repository name for the scaffolded project'
+        required: true
+        type: string
+      port_context:
+        description: 'Port context as JSON string'
+        required: true
+        type: string
+
+jobs:
+  create-scaffold-project:
+    uses: ./.github/workflows/templates/create-scaffold-project.yml # Path to your reusable workflow
+    with:
+      repository_name: ${{ inputs.repository_name }}
+      language: ${{ inputs.language }}
+    secrets: inherit
+    
+    ## Report Port.IO stage service created #
+  report-port-service:
+    runs-on: ubuntu-latest
+    needs: create-scaffold-project
+    steps:
+      - name: Report to Port
+        uses: port-labs/port-github-action@v1
+        with:
+          clientId: ${{ secrets.PORT_CLIENT_ID }}
+          clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
+          baseUrl: https://api.port.io
+          operation: UPSERT
+          icon: ${{ inputs.language }}
+          identifier: ${{ inputs.repository_name }}
+          blueprint: app_provisining_level_3
+          title: ${{ inputs.application_name }}
+          properties: |
+            {
+              "github_url": "${{ needs.create-scaffold-project.outputs.repo_url }}"
+            }
