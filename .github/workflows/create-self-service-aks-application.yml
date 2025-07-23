@@ -1,0 +1,128 @@
+name: create-self-service-aks-application
+
+on:
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: 'Repository name for the scaffolded project'
+        required: true
+        type: string
+      lifecycle:
+        description: 'Application lifecycle stage'
+        required: true
+        type: string
+      scaffold_required:
+        description: 'Scaffold project required'
+        required: true
+        type: boolean
+      application_name:
+        description: 'Application name for the scaffolded project'
+        required: true
+        type: string
+      application_tier:
+        description: 'Application tier'
+        required: true
+        type: string
+      language:
+        description: 'support language'
+        required: true
+        type: choice
+        options:
+          - python
+          - java
+          - javascript
+      namespace_name:
+        description: 'Namespace name for the application'
+        required: true
+        type: string
+      cpu_quota:
+        description: 'CPU quota for the application'
+        required: true
+        type: number
+      memory_quota:
+        description: 'Memory quota for the application in GiB'
+        required: true
+        type: number        
+      action_identifier:
+        description: 'current action identifier'
+        required: true
+        type: string
+      domain_identifier:
+        description: 'Entity identifier for the domain'
+        required: true
+        type: string
+      env:
+        description: 'Environment variables as JSON string'
+        required: true
+        type: string
+      port_context:
+        description: 'Port context as JSON string'
+        required: true
+        type: string
+env:
+    iconlist: '{"python" : "Python", "java": "Java", "javascript": "JavaScript"}'
+
+jobs:
+  create-scaffold-project:
+    uses: ./.github/workflows/templates/create-scaffold-project.yml # Path to your reusable workflow
+    with:
+      repository_name: ${{ inputs.repository_name }}
+      language: ${{ inputs.language }}
+      scaffold_required: ${{ inputs.scaffold_required }}
+    secrets: inherit
+
+  report-port-aks-namespace-entity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report to Port
+        uses: port-labs/port-github-action@v1
+        with:
+          clientId: ${{ secrets.PORT_CLIENT_ID }}
+          clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
+          baseUrl: https://api.port.io
+          operation: UPSERT
+          icon: "Cluster"
+          identifier: ${{ inputs.application_name }}
+          blueprint: aks_namespaces
+          title: ${{ inputs.application_name }}
+          properties: |
+            {
+              "cpu_quota": "${{ inputs.cpu_quota }}",
+              "memory_quota": "${{ inputs.memory_quota }}",
+              "name": "${{ inputs.namespace_name }}"
+            }
+          relations: | 
+            {
+              "environment": "${{ inputs.env }}"
+            }
+    ## Report Port.IO stage service created #
+  report-port-service:
+    runs-on: ubuntu-latest
+    needs: create-scaffold-project
+    steps:
+      - name: Report to Port
+        uses: port-labs/port-github-action@v1
+        with:
+          clientId: ${{ secrets.PORT_CLIENT_ID }}
+          clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
+          baseUrl: https://api.port.io
+          operation: UPSERT
+          icon: ${{ fromJSON(env.iconlist)[inputs.language] }} 
+          blueprint: ${{ inputs.action_identifier }}
+          title: ${{ inputs.application_name }}
+          identifier: ${{ inputs.application_name }}
+          properties: |
+            {
+
+              "URL": "${{ needs.create-scaffold-project.outputs.repo_url }}",
+              "lifecycle": "${{ inputs.lifecycle }}",
+              "language": "${{ inputs.language }}",
+            }
+          relations: | 
+            {
+              "environment": "${{ inputs.env }}",
+              "repository": "${{ inputs.repository_name }}",
+              "domain": "${{ inputs.domain_identifier }}",
+              aks_namespace: "${{ inputs.namespace_name }}",
+              "application_tier": "${{ inputs.application_tier }}"
+            }

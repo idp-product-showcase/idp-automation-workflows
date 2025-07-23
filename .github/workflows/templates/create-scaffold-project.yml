@@ -1,0 +1,77 @@
+name: Create Scaffold Project
+
+# permissions:
+#   contents: write
+#   actions: write
+
+
+on:
+  workflow_call:
+    inputs:
+      repository_name:
+        description: 'Repository name for the scaffolded project'
+        required: true
+        type: string
+      language:
+        description: 'support language'
+        required: true
+        type: string
+      scaffold_required::
+        description: 'support language'
+        required: false
+        type: boolean
+        default: false
+    outputs:
+      repo_url:
+        description: "URL of the created repository"
+        value: ${{ jobs.create-template-repository.outputs.repo_url }}
+      repo_path:
+        description: "URL of the created repository"
+        value: ${{ jobs.create-template-repository.outputs.repo_path }}
+
+
+jobs:
+  create-template-repository:
+    runs-on: ubuntu-latest
+    outputs:
+      repo_url: ${{ steps.create_repo.outputs.repo_url }}
+      repo_path: ${{ steps.create_repo.outputs.repo_path }}
+    steps:
+      - name: Create Repository from Template
+        id: create_repo
+        if: ${{ inputs.scaffold_required }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_REPO_TOKEN}}
+        run: |
+          gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
+            --private \
+            --template "${{ github.repository_owner }}/idp-template-application-${{ inputs.language }}"
+           echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
+           echo "repo_path=${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
+
+      - name: Create empty Repository
+        id: create_repo
+        if: ${{ inputs.scaffold_required }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_REPO_TOKEN}}
+        run: |
+          gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
+            --private
+           echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
+           echo "repo_path=${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
+
+      - name: Report to Port
+        uses: port-labs/port-github-action@v1
+        with:
+          clientId: ${{ secrets.PORT_CLIENT_ID }}
+          clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
+          baseUrl: https://api.port.io
+          operation: UPSERT
+          identifier: ${{ inputs.repository_name }}
+          title: ${{ inputs.repository_name }}
+          blueprint: githubRepository
+          properties: |
+            {
+              "url": "https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}"
+              defaultBranch: "main"
+            }
