@@ -24,7 +24,7 @@ env:
 
 jobs:
   create-scaffold-project:
-    uses: ./.github/workflows/templates/create-scaffold-project.yml # Path to your reusable workflow
+    uses: ./templates/create-scaffold-project.yml # Path to your reusable workflow
     with:
       repository_name: ${{ fromJSON(input.repository_properties).repository_name }} 
       language: ${{ fromJSON(input.application_properties).language }}
