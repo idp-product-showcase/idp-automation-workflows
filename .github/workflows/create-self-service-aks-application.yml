@@ -26,9 +26,9 @@ jobs:
   create-scaffold-project:
     uses: ./.github/workflows/create-scaffold-project.yml # Path to your reusable workflow
     with:
-      repository_name: ${{ fromJSON(input.repository_properties).repository_name }} 
-      language: ${{ fromJSON(input.application_properties).language }}
-      scaffold_required: ${{ fromJSON(input.repository_properties).scaffold_required }}
+      repository_name: ${{ fromJSON(inputs.repository_properties).repository_name }} 
+      language: ${{ fromJSON(inputs.application_properties).language }}
+      scaffold_required: ${{ fromJSON(inputs.repository_properties).scaffold_required }}
     secrets: inherit
 
   report-port-aks-namespace-entity:
@@ -42,18 +42,18 @@ jobs:
           baseUrl: https://api.port.io
           operation: UPSERT
           icon: "Cluster"
-          identifier: ${{ fromJSON(input.aks_namespace_properties).namespace_name }}
+          identifier: ${{ fromJSON(inputs.aks_namespace_properties).namespace_name }}
           blueprint: aks_namespaces
-          title: ${{ fromJSON(input.aks_namespace_properties).namespace_name }}
+          title: ${{ fromJSON(inputs.aks_namespace_properties).namespace_name }}
           properties: |
             {
-              "cpu_quota": "${{ fromJSON(input.aks_namespace_properties).cpu_quota }}",
-              "memory_quota": "${{ fromJSON(input.aks_namespace_properties).memory_quota }}",
-              "name": "${{ fromJSON(input.aks_namespace_properties).namespace_name }}"
+              "cpu_quota": "${{ fromJSON(inputs.aks_namespace_properties).cpu_quota }}",
+              "memory_quota": "${{ fromJSON(inputs.aks_namespace_properties).memory_quota }}",
+              "name": "${{ fromJSON(inputs.aks_namespace_properties).namespace_name }}"
             }
           relations: | 
             {
-              "environment":  "${{ fromJSON(input.application_properties).env }}"
+              "environment":  "${{ fromJSON(inputs.application_properties).env }}"
             }
     ## Report Port.IO stage service created #
   report-port-service:
@@ -68,21 +68,21 @@ jobs:
           baseUrl: https://api.port.io
           operation: UPSERT
           icon: ${{ fromJSON(env.iconlist)[inputs.language] }} 
-          blueprint: ${{ fromJSON(input.port_context).action_identifier }}
-          title: ${{ fromJSON(input.application_properties).application_name }}
-          identifier: ${{ fromJSON(input.application_properties).application_name }}
+          blueprint: ${{ fromJSON(inputs.port_context).action_identifier }}
+          title: ${{ fromJSON(inputs.application_properties).application_name }}
+          identifier: ${{ fromJSON(inputs.application_properties).application_name }}
           properties: |
             {
 
               "URL": "${{ needs.create-scaffold-project.outputs.repo_url }}",
-              "lifecycle": "${{ fromJSON(input.application_properties).lifecycle }}",
-              "language": "${{ fromJSON(input.application_properties).language }}",
+              "lifecycle": "${{ fromJSON(inputs.application_properties).lifecycle }}",
+              "language": "${{ fromJSON(inputs.application_properties).language }}",
             }
           relations: | 
             {
-              "environment": "${{ fromJSON(input.application_properties).env }}",
-              "repository": "${{ fromJSON(input.repository_properties).repository_name }}",
-              "domain": "${{ fromJSON(input.port_context).domain_identifier }} ",
-              aks_namespace: "${{ fromJSON(input.aks_namespace_properties).namespace_name }}",
-              "application_tier": "${{ fromJSON(input.application_properties).application_tier }}"
+              "environment": "${{ fromJSON(inputs.application_properties).env }}",
+              "repository": "${{ fromJSON(inputs.repository_properties).repository_name }}",
+              "domain": "${{ fromJSON(inputs.port_context).domain_identifier }} ",
+              aks_namespace: "${{ fromJSON(inputs.aks_namespace_properties).namespace_name }}",
+              "application_tier": "${{ fromJSON(inputs.application_properties).application_tier }}"
             }
