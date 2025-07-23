@@ -3,56 +3,16 @@ name: create-self-service-aks-application
 on:
   workflow_dispatch:
     inputs:
-      repository_name:
-        description: 'Repository name for the scaffolded project'
+      application_properties:
+        description: 'Application properties as JSON string'
         required: true
         type: string
-      lifecycle:
-        description: 'Application lifecycle stage'
+      repository_properties:
+        description: 'Application properties as JSON string'
         required: true
         type: string
-      scaffold_required:
-        description: 'Scaffold project required'
-        required: true
-        type: boolean
-      application_name:
-        description: 'Application name for the scaffolded project'
-        required: true
-        type: string
-      application_tier:
-        description: 'Application tier'
-        required: true
-        type: string
-      language:
-        description: 'support language'
-        required: true
-        type: choice
-        options:
-          - python
-          - java
-          - javascript
-      namespace_name:
-        description: 'Namespace name for the application'
-        required: true
-        type: string
-      cpu_quota:
-        description: 'CPU quota for the application'
-        required: true
-        type: number
-      memory_quota:
-        description: 'Memory quota for the application in GiB'
-        required: true
-        type: number        
-      action_identifier:
-        description: 'current action identifier'
-        required: true
-        type: string
-      domain_identifier:
-        description: 'Entity identifier for the domain'
-        required: true
-        type: string
-      env:
-        description: 'Environment variables as JSON string'
+      aks_namespace_properties:
+        description: 'Application properties as JSON string'
         required: true
         type: string
       port_context:
@@ -66,9 +26,9 @@ jobs:
   create-scaffold-project:
     uses: ./.github/workflows/templates/create-scaffold-project.yml # Path to your reusable workflow
     with:
-      repository_name: ${{ inputs.repository_name }}
-      language: ${{ inputs.language }}
-      scaffold_required: ${{ inputs.scaffold_required }}
+      repository_name: ${{ fromJSON(input.repository_properties).repository_name }} 
+      language: ${{ fromJSON(input.application_properties).language }}
+      scaffold_required: ${{ fromJSON(input.repository_properties).scaffold_required }}
     secrets: inherit
 
   report-port-aks-namespace-entity:
@@ -82,18 +42,18 @@ jobs:
           baseUrl: https://api.port.io
           operation: UPSERT
           icon: "Cluster"
-          identifier: ${{ inputs.application_name }}
+          identifier: ${{ fromJSON(input.aks_namespace_properties).namespace_name }}
           blueprint: aks_namespaces
-          title: ${{ inputs.application_name }}
+          title: ${{ fromJSON(input.aks_namespace_properties).namespace_name }}
           properties: |
             {
-              "cpu_quota": "${{ inputs.cpu_quota }}",
-              "memory_quota": "${{ inputs.memory_quota }}",
-              "name": "${{ inputs.namespace_name }}"
+              "cpu_quota": "${{ fromJSON(input.aks_namespace_properties).cpu_quota }}",
+              "memory_quota": "${{ fromJSON(input.aks_namespace_properties).memory_quota }}",
+              "name": "${{ fromJSON(input.aks_namespace_properties).namespace_name }}"
             }
           relations: | 
             {
-              "environment": "${{ inputs.env }}"
+              "environment":  "${{ fromJSON(input.application_properties).env }}"
             }
     ## Report Port.IO stage service created #
   report-port-service:
@@ -108,21 +68,21 @@ jobs:
           baseUrl: https://api.port.io
           operation: UPSERT
           icon: ${{ fromJSON(env.iconlist)[inputs.language] }} 
-          blueprint: ${{ inputs.action_identifier }}
-          title: ${{ inputs.application_name }}
-          identifier: ${{ inputs.application_name }}
+          blueprint: ${{ fromJSON(input.port_context).action_identifier }}
+          title: ${{ fromJSON(input.application_properties).application_name }}
+          identifier: ${{ fromJSON(input.application_properties).application_name }}
           properties: |
             {
 
               "URL": "${{ needs.create-scaffold-project.outputs.repo_url }}",
-              "lifecycle": "${{ inputs.lifecycle }}",
-              "language": "${{ inputs.language }}",
+              "lifecycle": "${{ fromJSON(input.application_properties).lifecycle }}",
+              "language": "${{ fromJSON(input.application_properties).language }}",
             }
           relations: | 
             {
-              "environment": "${{ inputs.env }}",
-              "repository": "${{ inputs.repository_name }}",
-              "domain": "${{ inputs.domain_identifier }}",
-              aks_namespace: "${{ inputs.namespace_name }}",
-              "application_tier": "${{ inputs.application_tier }}"
+              "environment": "${{ fromJSON(input.application_properties).env }}",
+              "repository": "${{ fromJSON(input.repository_properties).repository_name }}",
+              "domain": "${{ fromJSON(input.port_context).domain_identifier }} ",
+              aks_namespace: "${{ fromJSON(input.aks_namespace_properties).namespace_name }}",
+              "application_tier": "${{ fromJSON(input.application_properties).application_tier }}"
             }
