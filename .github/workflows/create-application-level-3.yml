@@ -62,5 +62,7 @@ jobs:
           title: ${{ inputs.application_name }}
           properties: |
             {
+              "application_name": "${{ inputs.application_name }}",
+              "language": "${{ inputs.language }}",
               "github_url": "${{ needs.create-scaffold-project.outputs.repo_url }}"
             }
