@@ -44,7 +44,7 @@ jobs:
           operation: UPSERT
           icon: "Cluster"
           identifier: ${{ fromJSON(inputs.aks_namespace_properties).namespace_name }}
-          blueprint: aks_namespaces
+          blueprint: aks_namespace
           title: ${{ fromJSON(inputs.aks_namespace_properties).namespace_name }}
           properties: |
             {
