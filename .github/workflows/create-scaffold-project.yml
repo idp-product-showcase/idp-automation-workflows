@@ -20,6 +20,9 @@ on:
       repo_url:
         description: "URL of the created repository"
         value: ${{ jobs.create-template-repository.outputs.repo_url }}
+      repo_path:
+        description: "URL of the created repository"
+        value: ${{ jobs.create-template-repository.outputs.repo_path }}
 
 
 jobs:
@@ -27,6 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       repo_url: ${{ steps.create_repo.outputs.repo_url }}
+      repo_path: ${{ steps.create_repo.outputs.repo_path }}
     steps:
       - name: Create Repository from Template
         id: create_repo
@@ -37,3 +41,4 @@ jobs:
             --private \
             --template "${{ github.repository_owner }}/idp-template-application-${{ inputs.language }}"
            echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
+           echo "repo_path=${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"

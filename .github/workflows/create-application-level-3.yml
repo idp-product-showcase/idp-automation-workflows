@@ -35,6 +35,8 @@ on:
         description: 'Port context as JSON string'
         required: true
         type: string
+env:
+    iconlist: '{"python" : "Python", "java": "Java", "javascript": "JavaScript"}'
 
 jobs:
   create-scaffold-project:
@@ -56,7 +58,7 @@ jobs:
           clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
           baseUrl: https://api.port.io
           operation: UPSERT
-          icon: ${{ inputs.language }}
+          icon: ${{ fromJSON(iconlist.myjson)[${{ inputs.language }}] }} 
           identifier: ${{ inputs.repository_name }}
           blueprint: app_provisining_level_3
           title: ${{ inputs.application_name }}
@@ -65,4 +67,8 @@ jobs:
               "application_name": "${{ inputs.application_name }}",
               "language": "${{ inputs.language }}",
               "github_url": "${{ needs.create-scaffold-project.outputs.repo_url }}"
+            }
+          relations: | 
+            {
+              "github_project_repository": "${{ needs.create-scaffold-project.outputs.repo_path }}"
             }
