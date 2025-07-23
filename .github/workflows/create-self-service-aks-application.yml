@@ -59,7 +59,7 @@ jobs:
     ## Report Port.IO stage service created #
   report-port-service:
     runs-on: ubuntu-latest
-    needs: create-scaffold-project
+    needs: report-port-aks-namespace-entity
     steps:
       - name: Report to Port
         uses: port-labs/port-github-action@v1
