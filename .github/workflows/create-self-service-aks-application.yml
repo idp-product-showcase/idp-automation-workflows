@@ -75,7 +75,7 @@ jobs:
           properties: |
             {
 
-              "url": "${{ needs.create-scaffold-project.outputs.repo_url }}",
+              "URL": "${{ needs.create-scaffold-project.outputs.repo_url }}",
               "lifecycle": "${{ fromJSON(inputs.application_properties).lifecycle }}",
               "language": "${{ fromJSON(inputs.application_properties).language }}"
             }
