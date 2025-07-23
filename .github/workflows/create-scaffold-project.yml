@@ -1,8 +1,8 @@
 name: Create Scaffold Project
 
-permissions:
-  contents: write
-  actions: write
+# permissions:
+#   contents: write
+#   actions: write
 
 
 on:
