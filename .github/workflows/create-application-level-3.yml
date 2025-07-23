@@ -58,7 +58,7 @@ jobs:
           clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
           baseUrl: https://api.port.io
           operation: UPSERT
-          icon: ${{ fromJSON(iconlist.myjson)[${{ inputs.language }}] }} 
+          icon: ${{ fromJSON(env.iconlist)[inputs.language] }} 
           identifier: ${{ inputs.repository_name }}
           blueprint: app_provisining_level_3
           title: ${{ inputs.application_name }}
