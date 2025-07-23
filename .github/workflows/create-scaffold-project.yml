@@ -66,6 +66,6 @@ jobs:
           blueprint: githubRepository
           properties: |
             {
-              "url": "https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}"
+              "url": "https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}",
               defaultBranch: "main"
             }
