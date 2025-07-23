@@ -38,7 +38,7 @@ on:
 
 jobs:
   create-scaffold-project:
-    uses: ./.github/workflows/templates/create-scaffold-project.yml # Path to your reusable workflow
+    uses: ./.github/workflows/create-scaffold-project.yml # Path to your reusable workflow
     with:
       repository_name: ${{ inputs.repository_name }}
       language: ${{ inputs.language }}
