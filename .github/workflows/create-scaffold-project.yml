@@ -16,7 +16,7 @@ on:
         description: 'support language'
         required: true
         type: string
-      scaffold_required::
+      scaffold_required:
         description: 'support language'
         required: false
         type: boolean
