@@ -26,11 +26,11 @@ on:
       cpu_quota:
         description: 'Repository name for the scaffolded project'
         required: true
-        type: string
+        type: number
       memory_quota_gi_b:
         description: 'Repository name for the scaffolded project'
         required: true
-        type: string
+        type: number
       port_context:
         description: 'Port context as JSON string'
         required: true
