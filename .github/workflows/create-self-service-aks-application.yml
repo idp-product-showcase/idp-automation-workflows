@@ -33,6 +33,7 @@ jobs:
 
   report-port-aks-namespace-entity:
     runs-on: ubuntu-latest
+    needs: create-scaffold-project
     steps:
       - name: Report to Port
         uses: port-labs/port-github-action@v1

@@ -43,22 +43,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_REPO_TOKEN}}
         run: |
-          gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
-            --private \
-            --template "${{ github.repository_owner }}/idp-template-application-${{ inputs.language }}"
-           echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
-           echo "repo_path=${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
-
-      - name: Create empty Repository
-        id: create_repo
-        if: ${{ inputs.scaffold_required }}
-        env:
-          GH_TOKEN: ${{ secrets.GH_REPO_TOKEN}}
-        run: |
-          gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
-            --private
-           echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
-           echo "repo_path=${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
+            if [ "${{ inputs.scaffold_required }}" = "true" ]; then
+              gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
+                --private \
+                --template "${{ github.repository_owner }}/idp-template-application-${{ inputs.language }}"
+            else
+              gh repo create "${{ github.repository_owner }}/${{ inputs.repository_name }}" \
+                --private
+            fi
+            echo "repo_url=https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
+            echo "repo_path=${{ github.repository_owner }}/${{ inputs.repository_name }}" >> "$GITHUB_OUTPUT"
 
       - name: Report to Port
         uses: port-labs/port-github-action@v1
