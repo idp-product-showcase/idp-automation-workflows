@@ -67,5 +67,5 @@ jobs:
           properties: |
             {
               "url": "https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}",
-              defaultBranch: "main"
+              "defaultBranch": "main"
             }
