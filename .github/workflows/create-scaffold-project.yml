@@ -6,7 +6,7 @@ permissions:
 
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       repository_name:
         description: 'Repository name for the scaffolded project'
@@ -15,19 +15,18 @@ on:
       language:
         description: 'support language'
         required: true
-        type: choice
-        options:
-          - python
-          - java
-          - javascript
-outputs:
-  repo_url:
-    description: "URL of the created repository"
-    value: ${{ jobs.create-template-repository.outputs.repo_url }}
+        type: string
+    outputs:
+      repo_url:
+        description: "URL of the created repository"
+        value: ${{ jobs.create-template-repository.outputs.repo_url }}
+
 
 jobs:
   create-template-repository:
     runs-on: ubuntu-latest
+    outputs:
+      repo_url: ${{ steps.create_repo.outputs.repo_url }}
     steps:
       - name: Create Repository from Template
         id: create_repo
