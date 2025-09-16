@@ -1,4 +1,4 @@
-name: Fake CI/CD Pipeline
+name: Fake Infrastructure Pipeline
 
 on:
   workflow_dispatch:
@@ -37,8 +37,8 @@ jobs:
     needs: build-and-test
     if: always()
     with:
-      type: "CI"
-      name: "Application_pipeline"
+      type: "Azure Infrastructure"
+      name: "Azure_Infrastructure_pipeline"
       status: ${{ needs.build-and-test.result == 'success' && 'Active' || 'Failed' }}
       link: "https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}"
     secrets: inherit
