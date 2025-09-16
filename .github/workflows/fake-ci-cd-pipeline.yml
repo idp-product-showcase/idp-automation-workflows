@@ -31,7 +31,7 @@ jobs:
         run: echo "Deploying project..."
 
   report:
-    uses: ./.github/workflows/report-pipeline.yml
+    uses: ./.github/workflows/report-pipeline-operation.yml
     needs: build-and-test
     if: always()
     with:
