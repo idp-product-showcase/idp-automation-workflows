@@ -1,0 +1,42 @@
+name: Fake CI/CD Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    outputs:
+      job_status: ${{ job.status }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fake Build
+        run: echo "Building project..."
+
+      - name: Fake Test (random pass/fail)
+        run: |
+          RESULT=$((RANDOM % 2))
+          if [ "$RESULT" -eq 0 ]; then
+            echo "Tests passed!"
+            exit 0
+          else
+            echo "Tests failed!"
+            exit 1
+          fi
+
+      - name: Fake Deploy
+        if: ${{ success() }}
+        run: echo "Deploying project..."
+
+  report:
+    uses: ./.github/workflows/report-pipeline.yml
+    needs: build-and-test
+    if: always()
+    with:
+      type: "CI/CD"
+      name: "Fake CI/CD Pipeline"
+      status: ${{ needs.build-and-test.result == 'success' && 'Active' || 'Failed' }}
+      link: "https://github.com/${{ github.repository_owner }}/${{ inputs.repository_name }}"
+    secrets: inherit

@@ -1,0 +1,51 @@
+name: report pipeline operation
+
+# permissions:
+#   contents: write
+#   actions: write
+
+
+on:
+  workflow_call:
+    inputs:
+      type:
+        description: 'pipeline type'
+        required: true
+        type: string
+      status:
+        description: 'pipeline status'
+        required: true
+        type: string
+      name:
+        description: 'pipeline name'
+        required: true
+        type: string
+      link:
+        description: 'pipeline name'
+        required: true
+        type: string
+
+
+jobs:
+  report-pipeline-state:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report pipeline state to Port
+        uses: port-labs/port-github-action@v1
+        with:
+          clientId: ${{ secrets.PORT_CLIENT_ID }}
+          clientSecret: ${{ secrets.PORT_CLIENT_SECRET }}
+          baseUrl: https://api.port.io
+          operation: UPSERT
+          identifier: ${{ inputs.name }}
+          title: ${{ inputs.name }}
+          blueprint: pipelines
+          properties: |
+            {
+              "url": "https://github.com/${{ github.repository_owner }}/${{ inputs.link }}",
+              "created_at": "${{ github.event.repository.updated_at}}",
+              "updated_at": "${{ github.event.repository.updated_at}}",
+              "status": "${{ inputs.status }}",
+              "type": "${{ inputs.type }}",
+              "name": "${{ inputs.name }}"
+            }
